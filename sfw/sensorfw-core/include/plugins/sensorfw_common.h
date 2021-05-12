@@ -37,10 +37,20 @@ class Sensorfw {
 public:
     enum PluginType
     {
+        ACCELEROMETER,
+        COMPASS,
+        GYROSCOPE,
+        HUMIDITY,
+        LID,
         LIGHT,
-        PROXIMITY,
+        MAGNETOMETER,
         ORIENTATION,
-        COMPASS
+        PRESSURE,
+        PROXIMITY,
+        ROTATION,
+        STEPCOUNTER,
+        TAP,
+        TEMPERATURE
     };
 
     Sensorfw(

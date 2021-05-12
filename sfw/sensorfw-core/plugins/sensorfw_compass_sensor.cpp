@@ -24,7 +24,7 @@
 
 namespace
 {
-auto const null_handler = [](int){};
+auto const null_handler = [](CompassData){};
 }
 
 anbox::core::SensorfwCompassSensor::SensorfwCompassSensor(
@@ -67,5 +67,5 @@ void anbox::core::SensorfwCompassSensor::data_recived_impl()
     if(!m_socket->read<CompassData>(values))
         return;
 
-    handler(values[0].degrees_);
+    handler(values[0]);
 }

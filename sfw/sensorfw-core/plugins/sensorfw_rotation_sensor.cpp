@@ -18,24 +18,24 @@
  * Authored by: Erfan Abdi <erfangplus@gmail.com>
  */
 
-#include "plugins/sensorfw_proximity_sensor.h"
+#include "plugins/sensorfw_rotation_sensor.h"
 
 #include <stdexcept>
 
 namespace
 {
-auto const null_handler = [](ProximityData){};
+auto const null_handler = [](TimedXyzData){};
 }
 
-anbox::core::SensorfwProximitySensor::SensorfwProximitySensor(
-    std::string const& dbus_bus_address)
-    : Sensorfw(dbus_bus_address, "Proximity", PluginType::PROXIMITY),
+anbox::core::SensorfwRotationSensor::SensorfwRotationSensor(
+    std::string const &dbus_bus_address)
+    : Sensorfw(dbus_bus_address, "Rotation", PluginType::ROTATION),
       handler{null_handler}
 {
 }
 
-anbox::core::HandlerRegistration anbox::core::SensorfwProximitySensor::register_proximity_handler(
-    ProximityHandler const& handler)
+anbox::core::HandlerRegistration anbox::core::SensorfwRotationSensor::register_rotation_handler(
+    RotationHandler const& handler)
 {
     return EventLoopHandlerRegistration{
         dbus_event_loop,
@@ -43,7 +43,7 @@ anbox::core::HandlerRegistration anbox::core::SensorfwProximitySensor::register_
         [this]{ this->handler = null_handler; }};
 }
 
-void anbox::core::SensorfwProximitySensor::enable_proximity_events()
+void anbox::core::SensorfwRotationSensor::enable_rotation_events()
 {
     dbus_event_loop.enqueue(
         [this]
@@ -52,7 +52,7 @@ void anbox::core::SensorfwProximitySensor::enable_proximity_events()
         }).get();
 }
 
-void anbox::core::SensorfwProximitySensor::disable_proximity_events()
+void anbox::core::SensorfwRotationSensor::disable_rotation_events()
 {
     dbus_event_loop.enqueue(
         [this]
@@ -61,10 +61,10 @@ void anbox::core::SensorfwProximitySensor::disable_proximity_events()
         }).get();
 }
 
-void anbox::core::SensorfwProximitySensor::data_recived_impl()
+void anbox::core::SensorfwRotationSensor::data_recived_impl()
 {
-    QVector<ProximityData> values;
-    if(!m_socket->read<ProximityData>(values))
+    QVector<TimedXyzData> values;
+    if(!m_socket->read<TimedXyzData>(values))
         return;
 
     handler(values[0]);

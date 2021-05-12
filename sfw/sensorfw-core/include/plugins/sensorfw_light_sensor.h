@@ -29,7 +29,7 @@ namespace anbox
 namespace core
 {
 
-using LightHandler = std::function<void(double)>;
+using LightHandler = std::function<void(TimedUnsigned)>;
 
 class SensorfwLightSensor : public Sensorfw
 {

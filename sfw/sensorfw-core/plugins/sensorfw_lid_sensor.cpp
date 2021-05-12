@@ -18,24 +18,24 @@
  * Authored by: Erfan Abdi <erfangplus@gmail.com>
  */
 
-#include "plugins/sensorfw_proximity_sensor.h"
+#include "plugins/sensorfw_lid_sensor.h"
 
 #include <stdexcept>
 
 namespace
 {
-auto const null_handler = [](ProximityData){};
+auto const null_handler = [](LidData){};
 }
 
-anbox::core::SensorfwProximitySensor::SensorfwProximitySensor(
-    std::string const& dbus_bus_address)
-    : Sensorfw(dbus_bus_address, "Proximity", PluginType::PROXIMITY),
+anbox::core::SensorfwLidSensor::SensorfwLidSensor(
+    std::string const &dbus_bus_address)
+    : Sensorfw(dbus_bus_address, "Lid", PluginType::LID),
       handler{null_handler}
 {
 }
 
-anbox::core::HandlerRegistration anbox::core::SensorfwProximitySensor::register_proximity_handler(
-    ProximityHandler const& handler)
+anbox::core::HandlerRegistration anbox::core::SensorfwLidSensor::register_lid_handler(
+    LidHandler const& handler)
 {
     return EventLoopHandlerRegistration{
         dbus_event_loop,
@@ -43,7 +43,7 @@ anbox::core::HandlerRegistration anbox::core::SensorfwProximitySensor::register_
         [this]{ this->handler = null_handler; }};
 }
 
-void anbox::core::SensorfwProximitySensor::enable_proximity_events()
+void anbox::core::SensorfwLidSensor::enable_lid_events()
 {
     dbus_event_loop.enqueue(
         [this]
@@ -52,7 +52,7 @@ void anbox::core::SensorfwProximitySensor::enable_proximity_events()
         }).get();
 }
 
-void anbox::core::SensorfwProximitySensor::disable_proximity_events()
+void anbox::core::SensorfwLidSensor::disable_lid_events()
 {
     dbus_event_loop.enqueue(
         [this]
@@ -61,10 +61,10 @@ void anbox::core::SensorfwProximitySensor::disable_proximity_events()
         }).get();
 }
 
-void anbox::core::SensorfwProximitySensor::data_recived_impl()
+void anbox::core::SensorfwLidSensor::data_recived_impl()
 {
-    QVector<ProximityData> values;
-    if(!m_socket->read<ProximityData>(values))
+    QVector<LidData> values;
+    if(!m_socket->read<LidData>(values))
         return;
 
     handler(values[0]);

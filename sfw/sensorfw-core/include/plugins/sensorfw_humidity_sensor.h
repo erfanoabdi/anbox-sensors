@@ -22,28 +22,30 @@
 
 #include "utils/handler_registration.h"
 #include "plugins/sensorfw_common.h"
-#include "datatypes/posedata.h"
+#include "datatypes/timedunsigned.h"
 
 namespace anbox
 {
 namespace core
 {
 
-using OrientationHandler = std::function<void(PoseData)>;
+using HumidityHandler = std::function<void(TimedUnsigned)>;
 
-class SensorfwOrientationSensor : public Sensorfw
+class SensorfwHumiditySensor : public Sensorfw
 {
 public:
-    SensorfwOrientationSensor(std::string const& dbus_bus_address);
+    SensorfwHumiditySensor(std::string const& dbus_bus_address);
 
-    HandlerRegistration register_orientation_handler(OrientationHandler const& handler);
+    HandlerRegistration register_humidity_handler(
+        HumidityHandler const& handler);
 
-    void enable_orientation_events();
-    void disable_orientation_events();
+    void enable_humidity_events();
+    void disable_humidity_events();
+
 private:
     void data_recived_impl();
 
-    OrientationHandler handler;
+    HumidityHandler handler;
 };
 
 }

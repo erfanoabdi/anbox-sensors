@@ -29,7 +29,7 @@ namespace anbox
 namespace core
 {
 
-using CompassHandler = std::function<void(double)>;
+using CompassHandler = std::function<void(CompassData)>;
 
 class SensorfwCompassSensor : public Sensorfw
 {

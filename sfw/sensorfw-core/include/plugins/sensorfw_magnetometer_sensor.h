@@ -22,28 +22,30 @@
 
 #include "utils/handler_registration.h"
 #include "plugins/sensorfw_common.h"
-#include "datatypes/posedata.h"
+#include "datatypes/orientationdata.h"
 
 namespace anbox
 {
 namespace core
 {
 
-using OrientationHandler = std::function<void(PoseData)>;
+using MagnetometerHandler = std::function<void(CalibratedMagneticFieldData)>;
 
-class SensorfwOrientationSensor : public Sensorfw
+class SensorfwMagnetometerSensor : public Sensorfw
 {
 public:
-    SensorfwOrientationSensor(std::string const& dbus_bus_address);
+    SensorfwMagnetometerSensor(std::string const& dbus_bus_address);
 
-    HandlerRegistration register_orientation_handler(OrientationHandler const& handler);
+    HandlerRegistration register_magnetometer_handler(
+        MagnetometerHandler const& handler);
 
-    void enable_orientation_events();
-    void disable_orientation_events();
+    void enable_magnetometer_events();
+    void disable_magnetometer_events();
+
 private:
     void data_recived_impl();
 
-    OrientationHandler handler;
+    MagnetometerHandler handler;
 };
 
 }

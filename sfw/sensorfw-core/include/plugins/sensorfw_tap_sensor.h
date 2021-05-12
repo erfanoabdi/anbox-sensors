@@ -22,28 +22,30 @@
 
 #include "utils/handler_registration.h"
 #include "plugins/sensorfw_common.h"
-#include "datatypes/posedata.h"
+#include "datatypes/tapdata.h"
 
 namespace anbox
 {
 namespace core
 {
 
-using OrientationHandler = std::function<void(PoseData)>;
+using TapHandler = std::function<void(TapData)>;
 
-class SensorfwOrientationSensor : public Sensorfw
+class SensorfwTapSensor : public Sensorfw
 {
 public:
-    SensorfwOrientationSensor(std::string const& dbus_bus_address);
+    SensorfwTapSensor(std::string const& dbus_bus_address);
 
-    HandlerRegistration register_orientation_handler(OrientationHandler const& handler);
+    HandlerRegistration register_tap_handler(
+        TapHandler const& handler);
 
-    void enable_orientation_events();
-    void disable_orientation_events();
+    void enable_tap_events();
+    void disable_tap_events();
+
 private:
     void data_recived_impl();
 
-    OrientationHandler handler;
+    TapHandler handler;
 };
 
 }

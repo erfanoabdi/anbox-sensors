@@ -24,7 +24,7 @@
 
 namespace
 {
-auto const null_handler = [](double){};
+auto const null_handler = [](TimedUnsigned){};
 }
 
 anbox::core::SensorfwLightSensor::SensorfwLightSensor(
@@ -67,5 +67,5 @@ void anbox::core::SensorfwLightSensor::data_recived_impl()
     if(!m_socket->read<TimedUnsigned>(values))
         return;
 
-    handler(values[0].value_);
+    handler(values[0]);
 }

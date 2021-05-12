@@ -24,7 +24,7 @@
 
 namespace
 {
-auto const null_handler = [](anbox::core::OrientationData){};
+auto const null_handler = [](PoseData){};
 }
 
 anbox::core::SensorfwOrientationSensor::SensorfwOrientationSensor(
@@ -64,10 +64,8 @@ void anbox::core::SensorfwOrientationSensor::disable_orientation_events()
 void anbox::core::SensorfwOrientationSensor::data_recived_impl()
 {
     QVector<PoseData> values;
-    anbox::core::OrientationData output;
-    if(m_socket->read<PoseData>(values)) {
-        output = (anbox::core::OrientationData) values[0].orientation_;
-    }
+    if(!m_socket->read<PoseData>(values))
+        return;
 
-    handler(output);
+    handler(values[0]);
 }

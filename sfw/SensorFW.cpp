@@ -54,12 +54,9 @@ bool SensorFW::get_prox() {
 void SensorFW::register_sensors() {
     mRegistrations.push_back(
         data->proximity_sensor->register_proximity_handler(
-        [this](anbox::core::ProximityState state) {
-            if (state == anbox::core::ProximityState::near)
-                std::cout << "near" << std::endl;
-            else
-                std::cout << "far" << std::endl;
-            this->data->previous_prox_near = (state == anbox::core::ProximityState::near);
+        [this](ProximityData value) {
+            std::cout << "Prox: " << value.value_ << ", isNear: " << value.withinProximity_ << std::endl;
+            //this->data->previous_prox_near = (state == anbox::core::ProximityState::near);
         })
     );
     data->proximity_sensor->enable_proximity_events();

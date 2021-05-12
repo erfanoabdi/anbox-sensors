@@ -29,8 +29,7 @@ namespace anbox
 namespace core
 {
 
-enum class ProximityState{near, far};
-using ProximityHandler = std::function<void(ProximityState)>;
+using ProximityHandler = std::function<void(ProximityData)>;
 
 class SensorfwProximitySensor : public Sensorfw
 {
@@ -39,7 +38,6 @@ public:
 
     HandlerRegistration register_proximity_handler(
         ProximityHandler const& handler);
-    ProximityState proximity_state();
 
     void enable_proximity_events();
     void disable_proximity_events();
@@ -47,8 +45,7 @@ public:
 private:
     void data_recived_impl();
 
-    ProximityHandler m_handler;
-    anbox::core::ProximityState m_state;
+    ProximityHandler handler;
 };
 
 }

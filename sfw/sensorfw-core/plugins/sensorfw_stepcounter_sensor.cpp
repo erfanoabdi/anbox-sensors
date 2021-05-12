@@ -18,24 +18,24 @@
  * Authored by: Erfan Abdi <erfangplus@gmail.com>
  */
 
-#include "plugins/sensorfw_proximity_sensor.h"
+#include "plugins/sensorfw_stepcounter_sensor.h"
 
 #include <stdexcept>
 
 namespace
 {
-auto const null_handler = [](ProximityData){};
+auto const null_handler = [](TimedUnsigned){};
 }
 
-anbox::core::SensorfwProximitySensor::SensorfwProximitySensor(
-    std::string const& dbus_bus_address)
-    : Sensorfw(dbus_bus_address, "Proximity", PluginType::PROXIMITY),
+anbox::core::SensorfwStepcounterSensor::SensorfwStepcounterSensor(
+    std::string const &dbus_bus_address)
+    : Sensorfw(dbus_bus_address, "Stepcounter", PluginType::STEPCOUNTER),
       handler{null_handler}
 {
 }
 
-anbox::core::HandlerRegistration anbox::core::SensorfwProximitySensor::register_proximity_handler(
-    ProximityHandler const& handler)
+anbox::core::HandlerRegistration anbox::core::SensorfwStepcounterSensor::register_stepcounter_handler(
+    StepcounterHandler const& handler)
 {
     return EventLoopHandlerRegistration{
         dbus_event_loop,
@@ -43,7 +43,7 @@ anbox::core::HandlerRegistration anbox::core::SensorfwProximitySensor::register_
         [this]{ this->handler = null_handler; }};
 }
 
-void anbox::core::SensorfwProximitySensor::enable_proximity_events()
+void anbox::core::SensorfwStepcounterSensor::enable_stepcounter_events()
 {
     dbus_event_loop.enqueue(
         [this]
@@ -52,7 +52,7 @@ void anbox::core::SensorfwProximitySensor::enable_proximity_events()
         }).get();
 }
 
-void anbox::core::SensorfwProximitySensor::disable_proximity_events()
+void anbox::core::SensorfwStepcounterSensor::disable_stepcounter_events()
 {
     dbus_event_loop.enqueue(
         [this]
@@ -61,10 +61,10 @@ void anbox::core::SensorfwProximitySensor::disable_proximity_events()
         }).get();
 }
 
-void anbox::core::SensorfwProximitySensor::data_recived_impl()
+void anbox::core::SensorfwStepcounterSensor::data_recived_impl()
 {
-    QVector<ProximityData> values;
-    if(!m_socket->read<ProximityData>(values))
+    QVector<TimedUnsigned> values;
+    if(!m_socket->read<TimedUnsigned>(values))
         return;
 
     handler(values[0]);

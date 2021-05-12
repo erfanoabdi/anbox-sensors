@@ -62,10 +62,20 @@ anbox::core::Sensorfw::~Sensorfw()
 const char* anbox::core::Sensorfw::plugin_string() const
 {
     switch (m_plugin) {
-        case PluginType::LIGHT: return "alssensor";
-        case PluginType::PROXIMITY: return "proximitysensor";
-        case PluginType::ORIENTATION: return "orientationsensor";
+        case PluginType::ACCELEROMETER: return "accelerometersensor";
         case PluginType::COMPASS: return "compasssensor";
+        case PluginType::GYROSCOPE: return "gyroscopesensor";
+        case PluginType::HUMIDITY: return "humiditysensor";
+        case PluginType::LID: return "lidsensor";
+        case PluginType::LIGHT : return "alssensor";
+        case PluginType::MAGNETOMETER: return "magnetometersensor";
+        case PluginType::ORIENTATION: return "orientationsensor";
+        case PluginType::PRESSURE: return "pressuresensor";
+        case PluginType::PROXIMITY: return "proximitysensor";
+        case PluginType::ROTATION: return "rotationsensor";
+        case PluginType::STEPCOUNTER: return "stepcountersensor";
+        case PluginType::TAP: return "tapsensor";
+        case PluginType::TEMPERATURE: return "temperaturesensor";
     }
 
     return "";
@@ -74,10 +84,20 @@ const char* anbox::core::Sensorfw::plugin_string() const
 const char* anbox::core::Sensorfw::plugin_interface() const
 {
     switch (m_plugin) {
-        case PluginType::LIGHT: return "local.ALSSensor";
-        case PluginType::PROXIMITY: return "local.ProximitySensor";
-        case PluginType::ORIENTATION: return "local.OrientationSensor";
+        case PluginType::ACCELEROMETER: return "local.AccelerometerSensor";
         case PluginType::COMPASS: return "local.CompassSensor";
+        case PluginType::GYROSCOPE: return "local.GyroscopeSensor";
+        case PluginType::HUMIDITY: return "local.HumiditySensor";
+        case PluginType::LID: return "local.LidSensor";
+        case PluginType::LIGHT: return "local.ALSSensor";
+        case PluginType::MAGNETOMETER: return "local.MagnetometerSensor";
+        case PluginType::ORIENTATION: return "local.OrientationSensor";
+        case PluginType::PRESSURE: return "local.PressureSensor";
+        case PluginType::PROXIMITY: return "local.ProximitySensor";
+        case PluginType::ROTATION: return "local.RotationSensor";
+        case PluginType::STEPCOUNTER: return "local.StepCounterSensor";
+        case PluginType::TAP: return "local.TapSensor";
+        case PluginType::TEMPERATURE: return "local.TemperatureSensor";
     }
 
     return "";

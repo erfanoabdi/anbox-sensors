@@ -12,11 +12,21 @@ set(
 set(
     SENSORFW_CORE_PLUGINS_SRCS
 
+    plugins/sensorfw_accelerometer_sensor.cpp
     plugins/sensorfw_common.cpp
-    plugins/sensorfw_light_sensor.cpp
-    plugins/sensorfw_proximity_sensor.cpp
-    plugins/sensorfw_orientation_sensor.cpp
     plugins/sensorfw_compass_sensor.cpp
+    plugins/sensorfw_gyroscope_sensor.cpp
+    plugins/sensorfw_humidity_sensor.cpp
+    plugins/sensorfw_lid_sensor.cpp
+    plugins/sensorfw_light_sensor.cpp
+    plugins/sensorfw_magnetometer_sensor.cpp
+    plugins/sensorfw_orientation_sensor.cpp
+    plugins/sensorfw_pressure_sensor.cpp
+    plugins/sensorfw_proximity_sensor.cpp
+    plugins/sensorfw_rotation_sensor.cpp
+    plugins/sensorfw_stepcounter_sensor.cpp
+    plugins/sensorfw_tap_sensor.cpp
+    plugins/sensorfw_temperature_sensor.cpp
 )
 
 add_library(
