@@ -18,7 +18,7 @@
  * Authored by: Erfan Abdi <erfangplus@gmail.com>
  */
 
-#include "plugins/sensorfw_humidity_sensor.h"
+#include <plugins/sensorfw_humidity_sensor.h>
 
 #include <stdexcept>
 

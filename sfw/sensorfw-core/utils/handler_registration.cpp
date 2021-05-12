@@ -17,7 +17,7 @@
  * Authored by: Alexandros Frantzis <alexandros.frantzis@canonical.com>
  */
 
-#include "utils/handler_registration.h"
+#include <utils/handler_registration.h>
 
 namespace
 {

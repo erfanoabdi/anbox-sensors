@@ -22,9 +22,9 @@
 #include <string>
 #include <thread>
 
-#include "utils/dbus_connection_handle.h"
-#include "utils/event_loop_handler_registration.h"
-#include "utils/socketreader.h"
+#include <utils/dbus_connection_handle.h>
+#include <utils/event_loop_handler_registration.h>
+#include <utils/socketreader.h>
 
 #include <gutil_log.h>
 

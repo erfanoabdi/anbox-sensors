@@ -20,9 +20,9 @@
 
 #pragma once
 
-#include "utils/handler_registration.h"
-#include "plugins/sensorfw_common.h"
-#include "datatypes/timedunsigned.h"
+#include <utils/handler_registration.h>
+#include <plugins/sensorfw_common.h>
+#include <datatypes/timedunsigned.h>
 
 namespace anbox
 {

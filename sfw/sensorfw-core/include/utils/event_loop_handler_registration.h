@@ -19,8 +19,8 @@
 
 #pragma once
 
-#include "utils/handler_registration.h"
-#include "utils/event_loop.h"
+#include <utils/handler_registration.h>
+#include <utils/event_loop.h>
 
 namespace anbox
 {

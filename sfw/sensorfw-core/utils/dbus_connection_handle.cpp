@@ -17,7 +17,7 @@
  * Authored by: Alexandros Frantzis <alexandros.frantzis@canonical.com>
  */
 
-#include "utils/dbus_connection_handle.h"
+#include <utils/dbus_connection_handle.h>
 
 #include <stdexcept>
 

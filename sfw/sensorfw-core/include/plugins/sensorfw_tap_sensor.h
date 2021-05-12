@@ -20,9 +20,9 @@
 
 #pragma once
 
-#include "utils/handler_registration.h"
-#include "plugins/sensorfw_common.h"
-#include "datatypes/tapdata.h"
+#include <utils/handler_registration.h>
+#include <plugins/sensorfw_common.h>
+#include <datatypes/tapdata.h>
 
 namespace anbox
 {

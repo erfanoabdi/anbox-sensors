@@ -17,7 +17,7 @@
  * Authored by: Alexandros Frantzis <alexandros.frantzis@canonical.com>
  */
 
-#include "utils/event_loop.h"
+#include <utils/event_loop.h>
 
 #include <glib-unix.h>
 #include <pthread.h>

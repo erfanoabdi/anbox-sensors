@@ -22,25 +22,50 @@
 using anbox::SensorFW;
 
 int main() {
-    GMainLoop *loop;
     gutil_log_timestamp = FALSE;
     gutil_log_set_type(GLOG_TYPE_STDERR, "Sensorfw");
     gutil_log_default.level = GLOG_LEVEL_DEFAULT;
 
     SensorFW* service = new SensorFW();
-    service->setup_sensors();
-    service->register_sensors();
+    for (int nn = 0; nn < MAX_NUM_SENSORS; nn++) {
+        if(service->EnableSensorEvents(nn)) {
+            std::cout << "Sensor " << anbox::_SensorIdToName(nn) << " Not found!" << std::endl;
+        }
+    }
 
     while (true)
     {
         std::string line;
+        quint64 ts;
+        int x, y, z, rx, ry, rz, tmp;
+        unsigned value;
+        bool isNear;
+        std::cout << "Press any key to get sensor events:";
         std::getline(std::cin, line);
 
-        std::cout << "event: " << service->get_prox() << std::endl;
-
+        if (service->GetAccelerometerEvent(&ts, &x, &y, &z) == 0)
+            std::cout << "Acceleration: X: " << x << ", Y: " << y << ", Z: " << z << std::endl;
+        if (service->GetGyroscopeEvent(&ts, &x, &y, &z) == 0)
+            std::cout << "Gyroscope: X: " << x << ", Y: " << y << ", Z: " << z << std::endl;
+        if (service->GetHumidityEvent(&ts, &value) == 0)
+            std::cout << "Humidity: " << value << std::endl;
+        if (service->GetLightEvent(&ts, &value) == 0)
+            std::cout << "Light: " << value << std::endl;
+        if (service->GetMagnetometerEvent(&ts, &x, &y, &z, &rx, &ry, &rz, &tmp) == 0)
+            std::cout << "Magnetometer: X: " << x << ", Y: " << y << ", Z: " << z
+                << "rawX: " << rx << ", rawY: " << ry << ", rawZ: " << rz
+                << "CalibLevel: " << tmp << std::endl;
+        if (service->GetOrientationEvent(&ts, &tmp) == 0)
+            std::cout << "Orientation: " << tmp << std::endl;
+        if (service->GetPressureEvent(&ts, &value) == 0)
+            std::cout << "Pressure: " << value << std::endl;
+        if (service->GetProximityEvent(&ts, &value, &isNear) == 0)
+            std::cout << "Proximity: value: " << value << ", isNear: " << isNear << std::endl;
+        if (service->GetStepcounterEvent(&ts, &value) == 0)
+            std::cout << "Stepcounter: " << value << std::endl;
+        if (service->GetTemperatureEvent(&ts, &value) == 0)
+            std::cout << "Temperature: " << value << std::endl;
     }
-    //loop = g_main_loop_new (NULL, TRUE);
-    //g_main_loop_run (loop);
 
     return 0;
 }

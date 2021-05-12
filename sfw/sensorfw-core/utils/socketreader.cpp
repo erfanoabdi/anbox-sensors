@@ -24,7 +24,7 @@
    </p>
  */
 
-#include "utils/socketreader.h"
+#include <utils/socketreader.h>
 
 const char* SocketReader::channelIDString = "_SENSORCHANNEL_";
 

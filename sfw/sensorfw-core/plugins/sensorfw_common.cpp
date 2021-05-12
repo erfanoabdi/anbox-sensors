@@ -18,7 +18,7 @@
  * Authored by: Erfan Abdi <erfangplus@gmail.com>
  */
 
-#include "plugins/sensorfw_common.h"
+#include <plugins/sensorfw_common.h>
 
 #include <QObject>
 
@@ -208,13 +208,13 @@ void anbox::core::Sensorfw::start()
 
     m_running = true;
     read_loop = std::thread([this](){
-        GINFO("Eventloop started");
+        GINFO("%s Eventloop started", plugin_string());
         while (m_running) {
             if (m_socket->socket()->waitForReadyRead(10))
                 data_recived_impl();
         }
         m_running = false;
-        GINFO("Eventloop stopped");
+        GINFO("%s: Eventloop stopped", plugin_string());
     });
 
     int constexpr timeout_default = 100;
