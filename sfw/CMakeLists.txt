@@ -17,8 +17,8 @@ pkg_check_modules(GBINDER REQUIRED libgbinder)
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Network REQUIRED)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -pthread -std=gnu++11 ")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -pthread -std=gnu++11 ")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -pthread")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -pthread")
 
 add_subdirectory(sensorfw-core)
 
