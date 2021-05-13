@@ -21,7 +21,7 @@
 //#define LOG_NDEBUG 0
 
 #include <android/hardware/sensors/1.0/ISensors.h>
-#include <log/log.h>
+#include <android-base/logging.h>
 #include <mutex>
 
 using ::android::hardware::sensors::V1_0::SensorFlagBits;

@@ -81,14 +81,9 @@ static int sensor_device_pick_pending_event_locked(SensorDevice* d,
             //event->version = sizeof(*event);
         }
 
-        ALOGD("%s: %d [%f, %f, %f]", __FUNCTION__,
-                i,
-                event->u.data[0],
-                event->u.data[1],
-                event->u.data[2]);
         return i;
     }
-    ALOGE("No sensor to return!!! pendingSensors=0x%08x", d->pendingSensors);
+    LOG(ERROR) << "No sensor to return!!! pendingSensors=" << d->pendingSensors;
     // we may end-up in a busy loop, slow things down, just in case.
     usleep(1000);
     return -EINVAL;
@@ -105,8 +100,6 @@ static int sensor_device_pick_pending_event_locked(SensorDevice* d,
  */
 static int sensor_device_poll_event_locked(SensorDevice* dev)
 {
-    ALOGD("%s: dev=%p", __FUNCTION__, dev);
-
     // Accumulate pending events into |events| and |new_sensors| mask
     // until a 'sync' or 'wake' command is received. This also simplifies the
     // code a bit.
@@ -206,12 +199,10 @@ Return<Result> Sensors::setOperationMode(OperationMode) {
 
 Return<Result> Sensors::activate(
         int32_t handle, bool enabled) {
-    ALOGD("%s: handle=%s (%d) enabled=%d", __FUNCTION__,
-            _sensorIdToName(handle), handle, enabled);
 
     /* Sanity check */
     if (!ID_CHECK(handle)) {
-        ALOGE("activate: bad handle ID");
+        LOG(ERROR) << "activate: bad handle ID";
         return Result::BAD_VALUE;
     }
 
@@ -253,7 +244,8 @@ Return<void> Sensors::poll(int32_t maxCount, poll_cb _hidl_cb) {
         if(!lock.owns_lock()){
             // cannot get the lock, hidl service will go into deadlock if it is not restarted.
             // This is guaranteed to not trigger in passthrough mode.
-            ALOGE("ISensors::poll() re-entry. I do not know what to do except killing myself.");
+            LOG(ERROR) <<
+                    "ISensors::poll() re-entry. I do not know what to do except killing myself.";
             ::exit(-1);
         }
 
@@ -317,12 +309,9 @@ Return<Result> Sensors::batch(int32_t, int64_t, int64_t) {
 }
 
 Return<Result> Sensors::flush(int32_t handle) {
-    ALOGD("%s: handle=%s (%d)", __FUNCTION__,
-            _sensorIdToName(handle), handle);
-
     /* Sanity check */
     if (!ID_CHECK(handle)) {
-        ALOGE("%s: bad handle ID", __FUNCTION__);
+        LOG(ERROR) << "bad handle ID";
         return Result::BAD_VALUE;
     }
 
