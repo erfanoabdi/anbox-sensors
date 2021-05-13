@@ -35,14 +35,14 @@ int main() {
 
     status_t status = service->registerAsService();
     if (status != OK) {
-        ALOGE("Cannot register Sensors HAL service.");
+        LOG(ERROR) << "Cannot register Sensors HAL service.";
         return 1;
     }
 
-    ALOGI("Anbox Sensors HAL service ready.");
+    LOG(INFO) << "Anbox Sensors HAL service ready.";
 
     joinRpcThreadpool();
 
-    ALOGE("Sensors HAL service failed to join thread pool.");
+    LOG(ERROR) << "Sensors HAL service failed to join thread pool.";
     return 1;
 }
