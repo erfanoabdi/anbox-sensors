@@ -28,15 +28,6 @@ namespace sensors {
 namespace V1_0 {
 namespace implementation {
 
-static const char* _sensorIdToName(int id)
-{
-    int nn;
-    for (nn = 0; nn < MAX_NUM_SENSORS; nn++)
-        if (id == _sensorIds[nn].id)
-            return _sensorIds[nn].name;
-    return "<UNKNOWN>";
-}
-
 /* return the current time in nanoseconds */
 static int64_t now_ns(void) {
     struct timespec ts;
@@ -108,6 +99,8 @@ static int sensor_device_poll_event_locked(SensorDevice* dev)
 
     int64_t event_time = -1;
     int ret = 0;
+    quint64 ts;
+    int x, y, z;
 
     /* Release the lock since we're going to block on recv() */
     pthread_mutex_unlock(&dev->lock);
@@ -120,12 +113,14 @@ static int sensor_device_poll_event_locked(SensorDevice* dev)
     // values after that meta data has been received.
 
     /* "acceleration:<x>:<y>:<z>" corresponds to an acceleration event */
-    new_sensors |= SENSORS_ACCELERATION;
-    events[ID_ACCELERATION].u.vec3.x = 1.0f;
-    events[ID_ACCELERATION].u.vec3.y = 0.5f;
-    events[ID_ACCELERATION].u.vec3.z = 0;
-    events[ID_ACCELERATION].u.vec3.status = SensorStatus::ACCURACY_MEDIUM;
-    events[ID_ACCELERATION].sensorType = SensorType::ACCELEROMETER;
+    if (dev->mSensorFWDevice->GetAccelerometerEvent(&ts, &x, &y, &z) == 0) {
+        new_sensors |= SENSORS_ACCELEROMETER;
+        events[ID_ACCELEROMETER].u.vec3.x = x / 100.00f;
+        events[ID_ACCELEROMETER].u.vec3.y = y / 100.00f;
+        events[ID_ACCELEROMETER].u.vec3.z = z / 100.00f;
+        events[ID_ACCELEROMETER].u.vec3.status = SensorStatus::ACCURACY_MEDIUM;
+        events[ID_ACCELEROMETER].sensorType = SensorType::ACCELEROMETER;
+    }
 
     if (new_sensors) {
         /* update the time of each new sensor event. */
@@ -177,6 +172,8 @@ Sensors::Sensors()
         mSensorDevice->flush_count[idx] = 0;
     }
 
+    mSensorDevice->mSensorFWDevice = new SensorFW();
+
     pthread_mutex_init(&mSensorDevice->lock, NULL);
 
     mInitCheck = OK;
@@ -187,7 +184,42 @@ status_t Sensors::initCheck() const {
 }
 
 Return<void> Sensors::getSensorsList(getSensorsList_cb _hidl_cb) {
-    hidl_vec<SensorInfo> out(std::begin(sSensorListInit), std::end(sSensorListInit));
+    std::vector<SensorInfo> out_vector;
+
+    int sensors_count = 0;
+    
+    for (int nn = 0; nn < MAX_NUM_SENSORS; nn++) {
+        if(!mSensorDevice->mSensorFWDevice->IsSensorAvailable(nn)) {
+            LOG(ERROR) << "Sensor " << anbox::_SensorIdToName(nn) << " Not found!";
+            continue;
+        }
+        SensorInfo sensor_info;
+        switch (nn)
+        {
+        case ID_ACCELEROMETER:
+            sensor_info.sensorHandle = ID_ACCELEROMETER;
+            sensor_info.name = "SensorFW 3-axis Accelerometer";
+            sensor_info.vendor = kAnboxVendor;
+            sensor_info.version = 1;
+            sensor_info.type = SensorType::ACCELEROMETER;
+            sensor_info.typeAsString = "android.sensor.accelerometer";
+            sensor_info.maxRange = 39.3;
+            sensor_info.resolution = 1.0 / 4032.0;
+            sensor_info.power = 3.0;
+            sensor_info.minDelay = 10000;
+            sensor_info.fifoReservedEventCount = 0;
+            sensor_info.fifoMaxEventCount = 0;
+            sensor_info.requiredPermission = "";
+            sensor_info.maxDelay = 500000;
+            sensor_info.flags = SensorFlagBits::DATA_INJECTION |
+                                       SensorFlagBits::CONTINUOUS_MODE;
+            out_vector.push_back(sensor_info);
+            break;
+        default:
+            break;
+        }
+    }
+    hidl_vec<SensorInfo> out = out_vector;
 
     _hidl_cb(out);
     return Void();
@@ -217,6 +249,11 @@ Return<Result> Sensors::activate(
     uint32_t changed = active ^ new_sensors;
 
     if (changed) {
+        if (enabled)
+            mSensorDevice->mSensorFWDevice->EnableSensorEvents(handle);
+        else
+            mSensorDevice->mSensorFWDevice->DisableSensorEvents(handle);
+    } else {
         mSensorDevice->active_sensors = new_sensors;
     }
     pthread_mutex_unlock(&mSensorDevice->lock);
@@ -253,7 +290,7 @@ Return<void> Sensors::poll(int32_t maxCount, poll_cb _hidl_cb) {
             err = android::BAD_VALUE;
         } else {
             int bufferSize = maxCount <= kPollMaxBufferSize ? maxCount : kPollMaxBufferSize;
-            
+
             pthread_mutex_lock(&mSensorDevice->lock);
             if (!mSensorDevice->pendingSensors) {
                 /* Block until there are pending events. Note that this releases
@@ -261,11 +298,6 @@ Return<void> Sensors::poll(int32_t maxCount, poll_cb _hidl_cb) {
                  * returning. */
                 err = sensor_device_poll_event_locked(mSensorDevice);
                 if (err < 0) {
-                    goto out;
-                }
-                if (!mSensorDevice->pendingSensors) {
-                    /* 'wake' event received before any sensor data. */
-                    err = -EIO;
                     goto out;
                 }
             }

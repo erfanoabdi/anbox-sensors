@@ -24,10 +24,14 @@
 #include <android-base/logging.h>
 #include <mutex>
 
+#include "SensorFW.h"
+
 using ::android::hardware::sensors::V1_0::SensorFlagBits;
 using ::android::hardware::sensors::V1_0::SensorType;
 using ::android::hardware::sensors::V1_0::SensorStatus;
 using ::android::hardware::sensors::V1_0::MetaDataEventType;
+
+using anbox::SensorFW;
 
 namespace android {
 namespace hardware {
@@ -35,63 +39,10 @@ namespace sensors {
 namespace V1_0 {
 namespace implementation {
 
-#define MAX_NUM_SENSORS 10
-
-#define SUPPORTED_SENSORS  ((1<<MAX_NUM_SENSORS)-1)
-
-#define  ID_BASE                        0
-#define  ID_ACCELERATION                (ID_BASE+0)
-
-#define  SENSORS_ACCELERATION                 (1 << ID_ACCELERATION)
-
-#define  ID_CHECK(x)  ((unsigned)((x) - ID_BASE) < MAX_NUM_SENSORS)
-
-#define  SENSORS_LIST  \
-    SENSOR_(ACCELERATION,"acceleration") \
-
-static const struct {
-    const char*  name;
-    int          id; } _sensorIds[MAX_NUM_SENSORS] =
-{
-#define SENSOR_(x,y)  { y, ID_##x },
-    SENSORS_LIST
-#undef  SENSOR_
-};
-
 constexpr char kAnboxVendor[] = "The Anbox Project";
 
-/*
- * the following is the list of all supported sensors.
- * this table is used to build sSensorList declared below
- * according to which hardware sensors are reported as
- * available from the emulator (see get_sensors_list below)
- *
- * note: numerical values for maxRange/resolution/power for
- *       all sensors but light, pressure and humidity were
- *       taken from the reference AK8976A implementation
- */
-static const SensorInfo sSensorListInit[] = {
-    {
-        .sensorHandle = ID_ACCELERATION,
-        .name = "Goldfish 3-axis Accelerometer",
-        .vendor = kAnboxVendor,
-        .version = 1,
-        .type = SensorType::ACCELEROMETER,
-        .typeAsString = "android.sensor.accelerometer",
-        .maxRange = 39.3,
-        .resolution = 1.0 / 4032.0,
-        .power = 3.0,
-        .minDelay = 10000,
-        .fifoReservedEventCount = 0,
-        .fifoMaxEventCount = 0,
-        .requiredPermission = "",
-        .maxDelay = 500000,
-        .flags = SensorFlagBits::DATA_INJECTION |
-                 SensorFlagBits::CONTINUOUS_MODE
-    },
-};
-
 typedef struct SensorDevice {
+    SensorFW *mSensorFWDevice;
     Event sensors[MAX_NUM_SENSORS];
     uint32_t pendingSensors;
     int64_t timeStart;

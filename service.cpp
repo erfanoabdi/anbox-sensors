@@ -17,6 +17,7 @@
 
 #include "Sensors.h"
 
+#include <gutil_log.h>
 #include <hidl/HidlTransportSupport.h>
 
 using android::hardware::configureRpcThreadpool;
@@ -29,6 +30,10 @@ using android::OK;
 using android::status_t;
 
 int main() {
+    gutil_log_timestamp = FALSE;
+    gutil_log_set_type(GLOG_TYPE_STDERR, "anbox-sensorfw-hal");
+    gutil_log_default.level = GLOG_LEVEL_DEFAULT;
+
     android::sp<ISensors> service = new Sensors();
 
     configureRpcThreadpool(1, true);
