@@ -194,10 +194,10 @@ Return<void> Sensors::getSensorsList(getSensorsList_cb _hidl_cb) {
             continue;
         }
         SensorInfo sensor_info;
+        sensor_info.sensorHandle = id;
         switch (id)
         {
         case ID_ACCELEROMETER:
-            sensor_info.sensorHandle = ID_ACCELEROMETER;
             sensor_info.name = "SensorFW 3-axis Accelerometer";
             sensor_info.vendor = kAnboxVendor;
             sensor_info.version = 1;
@@ -213,6 +213,187 @@ Return<void> Sensors::getSensorsList(getSensorsList_cb _hidl_cb) {
             sensor_info.maxDelay = 500000;
             sensor_info.flags = SensorFlagBits::DATA_INJECTION |
                                 SensorFlagBits::CONTINUOUS_MODE;
+            out_vector.push_back(sensor_info);
+            break;
+        case ID_GYROSCOPE:
+            sensor_info.name = "SensorFW 3-axis Gyroscope";
+            sensor_info.vendor = kAnboxVendor;
+            sensor_info.version = 1;
+            sensor_info.type = SensorType::GYROSCOPE;
+            sensor_info.typeAsString = "android.sensor.gyroscope";
+            sensor_info.maxRange = 16.46;
+            sensor_info.resolution = 1.0 / 1000.0;
+            sensor_info.power = 3.0;
+            sensor_info.minDelay = 10000;
+            sensor_info.fifoReservedEventCount = 0;
+            sensor_info.fifoMaxEventCount = 0;
+            sensor_info.requiredPermission = "";
+            sensor_info.maxDelay = 500000;
+            sensor_info.flags = SensorFlagBits::DATA_INJECTION |
+                                SensorFlagBits::CONTINUOUS_MODE;
+            out_vector.push_back(sensor_info);
+            break;
+        case ID_HUMIDITY:
+            sensor_info.name = "SensorFW Humidity sensor";
+            sensor_info.vendor = kAnboxVendor;
+            sensor_info.version = 1;
+            sensor_info.type = SensorType::RELATIVE_HUMIDITY;
+            sensor_info.typeAsString = "android.sensor.relative_humidity";
+            sensor_info.maxRange = 100.0;
+            sensor_info.resolution = 1.0;
+            sensor_info.power = 20.0;
+            sensor_info.minDelay = 0;
+            sensor_info.fifoReservedEventCount = 0;
+            sensor_info.fifoMaxEventCount = 0;
+            sensor_info.requiredPermission = "";
+            sensor_info.maxDelay = 0;
+            sensor_info.flags = SensorFlagBits::DATA_INJECTION |
+                                SensorFlagBits::ON_CHANGE_MODE;
+            out_vector.push_back(sensor_info);
+            break;
+        case ID_LIGHT:
+            sensor_info.name = "SensorFW Light sensor";
+            sensor_info.vendor = kAnboxVendor;
+            sensor_info.version = 1;
+            sensor_info.type = SensorType::LIGHT;
+            sensor_info.typeAsString = "android.sensor.light";
+            sensor_info.maxRange = 40000.0;
+            sensor_info.resolution = 1.0;
+            sensor_info.power = 20.0;
+            sensor_info.minDelay = 0;
+            sensor_info.fifoReservedEventCount = 0;
+            sensor_info.fifoMaxEventCount = 0;
+            sensor_info.requiredPermission = "";
+            sensor_info.maxDelay = 0;
+            sensor_info.flags = SensorFlagBits::DATA_INJECTION |
+                                SensorFlagBits::ON_CHANGE_MODE;
+            out_vector.push_back(sensor_info);
+            break;
+        case ID_MAGNETIC_FIELD:
+            sensor_info.name = "SensorFW 3-axis Magnetic field sensor";
+            sensor_info.vendor = kAnboxVendor;
+            sensor_info.version = 1;
+            sensor_info.type = SensorType::MAGNETIC_FIELD;
+            sensor_info.typeAsString = "android.sensor.magnetic_field";
+            sensor_info.maxRange = 2000.0;
+            sensor_info.resolution = .5;
+            sensor_info.power = 6.7;
+            sensor_info.minDelay = 10000;
+            sensor_info.fifoReservedEventCount = 0;
+            sensor_info.fifoMaxEventCount = 0;
+            sensor_info.requiredPermission = "";
+            sensor_info.maxDelay = 500000;
+            sensor_info.flags = SensorFlagBits::DATA_INJECTION |
+                                SensorFlagBits::CONTINUOUS_MODE;
+            out_vector.push_back(sensor_info);
+            break;
+        case ID_MAGNETIC_FIELD_UNCALIBRATED:
+            sensor_info.name = "SensorFW 3-axis Magnetic field sensor (uncalibrated)";
+            sensor_info.vendor = kAnboxVendor;
+            sensor_info.version = 1;
+            sensor_info.type = SensorType::MAGNETIC_FIELD_UNCALIBRATED;
+            sensor_info.typeAsString = "android.sensor.magnetic_field_uncalibrated";
+            sensor_info.maxRange = 2000.0;
+            sensor_info.resolution = 0.5;
+            sensor_info.power = 6.7;
+            sensor_info.minDelay = 10000;
+            sensor_info.fifoReservedEventCount = 0;
+            sensor_info.fifoMaxEventCount = 0;
+            sensor_info.requiredPermission = "";
+            sensor_info.maxDelay = 500000;
+            sensor_info.flags = SensorFlagBits::DATA_INJECTION |
+                                SensorFlagBits::CONTINUOUS_MODE;
+            out_vector.push_back(sensor_info);
+            break;
+        case ID_DEVICE_ORIENTATION:
+            sensor_info.name = "SensorFW Device Orientation sensor";
+            sensor_info.vendor = kAnboxVendor;
+            sensor_info.version = 1;
+            sensor_info.type = SensorType::DEVICE_ORIENTATION;
+            sensor_info.typeAsString = "android.sensor.device_orientation";
+            sensor_info.maxRange = 3.0;
+            sensor_info.resolution = 1.0;
+            sensor_info.power = 0.1;
+            sensor_info.minDelay = 0;
+            sensor_info.fifoReservedEventCount = 0;
+            sensor_info.fifoMaxEventCount = 0;
+            sensor_info.requiredPermission = "";
+            sensor_info.maxDelay = 0;
+            sensor_info.flags = SensorFlagBits::DATA_INJECTION |
+                                SensorFlagBits::ON_CHANGE_MODE;
+            out_vector.push_back(sensor_info);
+            break;
+        case ID_PRESSURE:
+            sensor_info.name = "SensorFW Pressure sensor";
+            sensor_info.vendor = kAnboxVendor;
+            sensor_info.version = 1;
+            sensor_info.type = SensorType::PRESSURE;
+            sensor_info.typeAsString = "android.sensor.pressure";
+            sensor_info.maxRange = 800.0;
+            sensor_info.resolution = 1.0;
+            sensor_info.power = 20.0;
+            sensor_info.minDelay = 10000;
+            sensor_info.fifoReservedEventCount = 0;
+            sensor_info.fifoMaxEventCount = 0;
+            sensor_info.requiredPermission = "";
+            sensor_info.maxDelay = 500000;
+            sensor_info.flags = SensorFlagBits::DATA_INJECTION |
+                                SensorFlagBits::CONTINUOUS_MODE;
+            out_vector.push_back(sensor_info);
+            break;
+        case ID_PROXIMITY:
+            sensor_info.name = "SensorFW Proximity sensor";
+            sensor_info.vendor = kAnboxVendor;
+            sensor_info.version = 1;
+            sensor_info.type = SensorType::PROXIMITY;
+            sensor_info.typeAsString = "android.sensor.proximity";
+            sensor_info.maxRange = 1.0;
+            sensor_info.resolution = 1.0;
+            sensor_info.power = 20.0;
+            sensor_info.minDelay = 0;
+            sensor_info.fifoReservedEventCount = 0;
+            sensor_info.fifoMaxEventCount = 0;
+            sensor_info.requiredPermission = "";
+            sensor_info.maxDelay = 0;
+            sensor_info.flags = SensorFlagBits::DATA_INJECTION |
+                                SensorFlagBits::ON_CHANGE_MODE |
+                                SensorFlagBits::WAKE_UP;
+            out_vector.push_back(sensor_info);
+            break;
+        case ID_STEPCOUNTER:
+            sensor_info.name = "SensorFW Step counter sensor";
+            sensor_info.vendor = kAnboxVendor;
+            sensor_info.version = 1;
+            sensor_info.type = SensorType::STEP_COUNTER;
+            sensor_info.typeAsString = "android.sensor.step_counter";
+            sensor_info.maxRange = 1.0;
+            sensor_info.resolution = 1.0;
+            sensor_info.power = 0.0;
+            sensor_info.minDelay = 0;
+            sensor_info.fifoReservedEventCount = 0;
+            sensor_info.fifoMaxEventCount = 0;
+            sensor_info.requiredPermission = "";
+            sensor_info.maxDelay = 0;
+            sensor_info.flags = SensorFlagBits::DATA_INJECTION |
+                                SensorFlagBits::ON_CHANGE_MODE;
+            out_vector.push_back(sensor_info);
+            break;
+        case ID_TEMPERATURE:
+            sensor_info.name = "SensorFW Ambient Temperature sensor";
+            sensor_info.vendor = kAnboxVendor;
+            sensor_info.version = 1;
+            sensor_info.type = SensorType::AMBIENT_TEMPERATURE;
+            sensor_info.typeAsString = "android.sensor.ambient_temperature";
+            sensor_info.maxRange = 80.0;
+            sensor_info.resolution = 1.0;
+            sensor_info.power = 0.0;
+            sensor_info.minDelay = 0;
+            sensor_info.fifoReservedEventCount = 0;
+            sensor_info.fifoMaxEventCount = 0;
+            sensor_info.requiredPermission = "";
+            sensor_info.maxDelay = 0;
+            sensor_info.flags = SensorFlagBits::DATA_INJECTION |
+                                SensorFlagBits::ON_CHANGE_MODE;
             out_vector.push_back(sensor_info);
             break;
         default:
