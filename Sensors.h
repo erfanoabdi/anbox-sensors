@@ -43,7 +43,7 @@ constexpr char kAnboxVendor[] = "The Anbox Project";
 
 typedef struct SensorDevice {
     SensorFW *mSensorFWDevice;
-    uint64_t last_TimeStamp[MAX_NUM_SENSORS];
+    quint64 last_TimeStamp[MAX_NUM_SENSORS];
     Event sensors[MAX_NUM_SENSORS];
     uint32_t pendingSensors;
     int64_t timeStart;
