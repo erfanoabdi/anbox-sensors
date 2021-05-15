@@ -128,9 +128,9 @@ static int sensor_device_poll_event_locked(SensorDevice* dev)
     if (dev->mSensorFWDevice->GetGyroscopeEvent(&ts, &x, &y, &z) == 0) {
         if (ts != dev->last_TimeStamp[ID_GYROSCOPE]) {
             new_sensors |= SENSORS_GYROSCOPE;
-            events[ID_GYROSCOPE].u.vec3.x = x / 100.00f;
-            events[ID_GYROSCOPE].u.vec3.y = y / 100.00f;
-            events[ID_GYROSCOPE].u.vec3.z = z / 100.00f;
+            events[ID_GYROSCOPE].u.vec3.x = x / 1000.000f;
+            events[ID_GYROSCOPE].u.vec3.y = y / 1000.000f;
+            events[ID_GYROSCOPE].u.vec3.z = z / 1000.000f;
             events[ID_GYROSCOPE].u.vec3.status = SensorStatus::ACCURACY_MEDIUM;
             events[ID_GYROSCOPE].sensorType = SensorType::GYROSCOPE;
             dev->last_TimeStamp[ID_GYROSCOPE] = ts;
