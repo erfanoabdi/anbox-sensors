@@ -188,13 +188,13 @@ Return<void> Sensors::getSensorsList(getSensorsList_cb _hidl_cb) {
 
     int sensors_count = 0;
     
-    for (int nn = 0; nn < MAX_NUM_SENSORS; nn++) {
-        if(!mSensorDevice->mSensorFWDevice->IsSensorAvailable(nn)) {
-            LOG(ERROR) << "Sensor " << anbox::_SensorIdToName(nn) << " Not found!";
+    for (int id = 0; id < MAX_NUM_SENSORS; id++) {
+        if(!mSensorDevice->mSensorFWDevice->IsSensorAvailable(id)) {
+            LOG(ERROR) << "Sensor " << anbox::_SensorIdToName(id) << " Not found!";
             continue;
         }
         SensorInfo sensor_info;
-        switch (nn)
+        switch (id)
         {
         case ID_ACCELEROMETER:
             sensor_info.sensorHandle = ID_ACCELEROMETER;
@@ -212,7 +212,7 @@ Return<void> Sensors::getSensorsList(getSensorsList_cb _hidl_cb) {
             sensor_info.requiredPermission = "";
             sensor_info.maxDelay = 500000;
             sensor_info.flags = SensorFlagBits::DATA_INJECTION |
-                                       SensorFlagBits::CONTINUOUS_MODE;
+                                SensorFlagBits::CONTINUOUS_MODE;
             out_vector.push_back(sensor_info);
             break;
         default:
